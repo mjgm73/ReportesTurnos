@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Reporte de Planta</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #e5e5e5;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1A5276 0%, #2E86C1 100%);
+            padding: 24px 20px;
+            text-align: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .logo-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: white;
+            padding: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .company-name {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .form-content {
+            padding: 24px 20px;
+        }
+
+        .campo {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #1e2a3e;
+            margin-bottom: 8px;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 16px;
+            background: white;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: #2E86C1;
+            box-shadow: 0 0 0 3px rgba(46,134,193,0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .area-campos {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .area-campos.visible {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            padding: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: normal;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .radio-group input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .ventilador-item {
+            margin-bottom: 12px;
+        }
+        .ventilador-item label {
+            font-weight: normal;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+        .ventilador-item input {
+            padding: 10px 14px;
+        }
+
+        .preview {
+            background: #f0f9ff;
+            padding: 16px;
+            border-radius: 16px;
+            margin: 20px 0;
+            border-left: 4px solid #2E86C1;
+            font-size: 13px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .preview-label {
+            font-size: 12px;
+            color: #5f7d9c;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 40px;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.2s;
+        }
+
+        .btn-whatsapp:hover {
+            background: #20b859;
+        }
+
+        .btn-whatsapp:active {
+            transform: scale(0.98);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 16px 20px;
+            background: #f8fafc;
+            font-size: 11px;
+            color: #94a3b8;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .error {
+            color: #e53e3e;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .separator {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 20px 0;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #2E86C1;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            padding: 10px 0;
+            flex-wrap: wrap;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: normal;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .campo-condicional {
+            display: none;
+        }
+        
+        .campo-condicional.visible {
+            display: block;
+        }
+
+        /* Estilos para la carga de fotos */
+        .fotos-area {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .fotos-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #1e2a3e;
+        }
+
+        .btn-foto {
+            background: #2E86C1;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .btn-foto:hover {
+            background: #1A5276;
+        }
+
+        .btn-eliminar-fotos {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 10px;
+        }
+
+        .btn-eliminar-fotos:hover {
+            background: #c0392b;
+        }
+
+        .galeria {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .foto-item {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #e2e8f0;
+        }
+
+        .foto-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .foto-item .btn-eliminar {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .foto-item .btn-eliminar:hover {
+            background: #e74c3c;
+        }
+
+        .mensaje-fotos {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 8px;
+        }
+
+        .badge-fotos {
+            background: #2E86C1;
+            color: white;
+            border-radius: 20px;
+            padding: 2px 8px;
+            font-size: 11px;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <!-- LOGO PNG - Reemplaza el src con la URL de tu logo PNG -->
+                    <!-- <img src="C:\Users\mjgonzalez\Desktop\worker.svg" alt="Logo Cementos del Paraguay" class="logo-img" id="logoImg"> -->
+                             
+                
+                <!-- <div class="company-name"> <h1>🏭</h1> CEMENTOS CONCEPCIÓN CECON</div> -->
+                <label><h1 style="font-size: 50px; margin: 0;">🏭</h1></label><div class="company-name"> CEMENTOS CONCEPCIÓN CECON</div>
+            </div>
+            <h1>📋 Reporte de Planta</h1>
+            <p>Crudo · Horno · Petcoke · Cemento · Equipos Móviles</p>
+        </div>
+
+        <div class="form-content">
+            <div class="campo">
+                <label>🔄 Turno</label>
+                <select id="turno">
+                    <option value="">Seleccionar turno</option>
+                    <option value="Mañana">Mañana</option>
+                    <option value="Tarde">Tarde</option>
+                    <option value="Noche">Noche</option>
+                </select>
+            </div>
+
+            <div class="campo">
+                <label>🏭 Área</label>
+                <select id="area">
+                    <option value="">Seleccionar área</option>
+                    <option value="Crudo">Crudo</option>
+                    <option value="Horno">Horno</option>
+                    <option value="Petcoke">Petcoke</option>
+                    <option value="Cemento">Cemento</option>
+                    <option value="Equipos Moviles">Equipos Móviles</option>
+                </select>
+            </div>
+
+            <div class="campo">
+                <label>📌 Tipo</label>
+                <select id="tipo">
+                    <option value="">Seleccionar tipo</option>
+                    <option value="Operación normal">Operación normal</option>
+                    <option value="Mantenimiento">Mantenimiento</option>
+                    <option value="Parada">Parada</option>
+                    <option value="Novedad técnica">Novedad técnica</option>
+                    <option value="Ajuste de parámetros">Ajuste de parámetros</option>
+                    <option value="Inspección">Inspección</option>
+                </select>
+            </div>
+
+            <div class="campo">
+                <label>📝 Actividad / Novedad</label>
+                <textarea id="actividad" placeholder="Describa la actividad o novedad..."></textarea>
+            </div>
+
+            <!-- SECCIÓN DE FOTOS (OPCIONAL) -->
+            <div class="fotos-area">
+                <div class="fotos-header">
+                    📸 Fotos de la novedad <span class="badge-fotos">Opcional</span>
+                </div>
+                <input type="file" id="inputFotos" accept="image/*" multiple style="display: none;">
+                <button type="button" class="btn-foto" id="btnAgregarFoto">📷 Agregar foto(s)</button>
+                <button type="button" class="btn-eliminar-fotos" id="btnEliminarTodas">🗑️ Eliminar todas</button>
+                <div id="galeria" class="galeria"></div>
+                <div class="mensaje-fotos">Puedes agregar hasta 5 fotos. Las imágenes se adjuntarán al reporte de WhatsApp.</div>
+            </div>
+
+            <!-- CRUDO -->
+            <div id="crudoCampos" class="area-campos">
+                <div class="separator"></div>
+                <div class="subtitle">🏔️ PARÁMETROS CRUDO</div>
+                <div class="grid-2">
+                    <div class="campo">
+                        <label>📊 Grados pila 1</label>
+                        <input type="text" id="gradosPila1" placeholder="Ej: 85, 90...">
+                    </div>
+                    <div class="campo">
+                        <label>📊 Grados pila 2</label>
+                        <input type="text" id="gradosPila2" placeholder="Ej: 82, 88...">
+                    </div>
+                </div>
+                <div class="campo">
+                    <label>📊 % pila 3</label>
+                    <input type="text" id="porcentajePila3" placeholder="Ej: 45%, 50%...">
+                </div>
+                <div class="campo">
+                    <label>🔄 Pilas patio circular</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="pilasPatio" value="Chevron"> Chevron</label>
+                        <label><input type="radio" name="pilasPatio" value="Cono"> Cono</label>
+                        <label><input type="radio" name="pilasPatio" value="Mixta"> Mixta</label>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="campo">
+                        <label>📈 Grados para consumo</label>
+                        <input type="text" id="gradosConsumo" placeholder="Ej: 75, 80...">
+                    </div>
+                    <div class="campo">
+                        <label>📉 Grados formación</label>
+                        <input type="text" id="gradosFormacion" placeholder="Ej: 70, 75...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- HORNO -->
+            <div id="hornoCampos" class="area-campos">
+                <div class="separator"></div>
+                <div class="subtitle">🔥 PARÁMETROS HORNO</div>
+                <div class="campo">
+                    <label>🌬️ Posición ventiladores coraza</label>
+                    <div class="ventilador-item">
+                        <label>📍 M01</label>
+                        <input type="text" id="metroM01" placeholder="Ej: 1.2 m, 2.5 m, posición 3">
+                    </div>
+                    <div class="ventilador-item">
+                        <label>📍 M02</label>
+                        <input type="text" id="metroM02" placeholder="Ej: 1.2 m, 2.5 m, posición 3">
+                    </div>
+                    <div class="ventilador-item">
+                        <label>📍 M03</label>
+                        <input type="text" id="metroM03" placeholder="Ej: 1.2 m, 2.5 m, posición 3">
+                    </div>
+                    <div class="ventilador-item">
+                        <label>📍 M04</label>
+                        <input type="text" id="metroM04" placeholder="Ej: 1.2 m, 2.5 m, posición 3">
+                    </div>
+                </div>
+                <div class="campo">
+                    <label>📏 Altura cama enfriador crossbar</label>
+                    <input type="text" id="alturaCrossbar" placeholder="Ej: 1.2 m, 1.5 m...">
+                </div>
+                <div class="grid-2">
+                    <div class="campo">
+                        <label>🎯 Axial quemador</label>
+                        <input type="text" id="axialQuemador" placeholder="Ej: 45%, 50%...">
+                    </div>
+                    <div class="campo">
+                        <label>🎯 Radial quemador</label>
+                        <input type="text" id="radialQuemador" placeholder="Ej: 30%, 35%...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- CEMENTO -->
+            <div id="cementoCampos" class="area-campos">
+                <div class="separator"></div>
+                <div class="subtitle">🏭 PARÁMETROS CEMENTO</div>
+                <div class="grid-2">
+                    <div class="campo">
+                        <label>🧪 Nivel aditivo Sika (cm)</label>
+                        <input type="text" id="nivelSika" placeholder="Ej: 25, 30, 35...">
+                    </div>
+                    <div class="campo">
+                        <label>🧪 Nivel aditivo Grace (cm)</label>
+                        <input type="text" id="nivelGrace" placeholder="Ej: 20, 25, 28...">
+                    </div>
+                </div>
+                <div class="campo">
+                    <label>🔘 Seleccionar aditivo</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="aditivoSeleccionado" value="Grace"> Grace</label>
+                        <label><input type="radio" name="aditivoSeleccionado" value="Sika"> Sika</label>
+                    </div>
+                </div>
+                <div id="campoSilo611" class="campo-condicional">
+                    <label>🚫 Sin paso al silo 611</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="silo611" value="Sí"> Sí</label>
+                        <label><input type="radio" name="silo611" value="No"> No</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PETCOKE -->
+            <div id="petcokeCampos" class="area-campos">
+                <div class="separator"></div>
+                <div class="subtitle">🛢️ PARÁMETROS PETCOKE</div>
+                <div class="campo">
+                    <label>📝 Observaciones Petcoke</label>
+                    <textarea id="petcokeObs" placeholder="Agregar observaciones específicas de Petcoke..."></textarea>
+                </div>
+            </div>
+
+            <!-- EQUIPOS MOVILES -->
+            <div id="equiposMovilesCampos" class="area-campos">
+                <div class="separator"></div>
+                <div class="subtitle">🚜 EQUIPOS MÓVILES</div>
+                <div class="campo">
+                    <label>🔧 Equipo</label>
+                    <select id="tipoEquipo">
+                        <option value="">Seleccionar equipo</option>
+                        <option value="Cargadora">Cargadora</option>
+                        <option value="Retroexcavadora">Retroexcavadora</option>
+                        <option value="Camión volquete">Camión volquete</option>
+                        <option value="Camión mixer">Camión mixer</option>
+                        <option value="Montacargas">Montacargas</option>
+                        <option value="Camioneta">Camioneta</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label>🆔 ID / Placa / Número de equipo</label>
+                    <input type="text" id="idEquipo" placeholder="Ej: C-01, 123-ABC, #45">
+                </div>
+                <div class="grid-2">
+                    <div class="campo">
+                        <label>📊 Horómetro (hrs)</label>
+                        <input type="text" id="horometro" placeholder="Ej: 1250 hrs">
+                    </div>
+                    <div class="campo">
+                        <label>⛽ Nivel combustible</label>
+                        <input type="text" id="combustible" placeholder="Ej: 75%, 1/2 tanque">
+                    </div>
+                </div>
+                <div class="campo">
+                    <label>🔍 Condición del equipo</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" class="condCheckbox" value="Bueno"> ✅ Bueno</label>
+                        <label><input type="checkbox" class="condCheckbox" value="Regular"> ⚠️ Regular</label>
+                        <label><input type="checkbox" class="condCheckbox" value="Malo"> ❌ Malo</label>
+                    </div>
+                </div>
+                <div class="campo">
+                    <label>🔧 Mantenimiento realizado</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" class="mantCheckbox" value="Lubricación"> 🛢️ Lubricación</label>
+                        <label><input type="checkbox" class="mantCheckbox" value="Cambio de filtros"> 🔄 Cambio de filtros</label>
+                        <label><input type="checkbox" class="mantCheckbox" value="Revisión de llantas"> ⚙️ Revisión de llantas</label>
+                        <label><input type="checkbox" class="mantCheckbox" value="Revisión de frenos"> 🛑 Revisión de frenos</label>
+                        <label><input type="checkbox" class="mantCheckbox" value="Limpieza general"> 🧼 Limpieza general</label>
+                        <label><input type="checkbox" class="mantCheckbox" value="Otro mantenimiento"> 🔧 Otro</label>
+                    </div>
+                </div>
+                <div class="campo">
+                    <label>📝 Observaciones del equipo</label>
+                    <textarea id="obsEquipo" placeholder="Ej: Ruido en motor, fuga hidráulica, luces averiadas..."></textarea>
+                </div>
+                <div class="campo">
+                    <label>👨‍🔧 Operador / Responsable</label>
+                    <input type="text" id="operadorEquipo" placeholder="Nombre del operador">
+                </div>
+            </div>
+
+            <div class="campo">
+                <label>👤 Reportado por</label>
+                <input type="text" id="reportado" placeholder="Nombre del operador">
+            </div>
+
+            <div class="preview">
+                <div class="preview-label">📱 Vista previa del mensaje:</div>
+                <div id="preview">📋 REPORTE DE PLANTA\n\n🔄 Turno: -\n🏭 Área: -\n📌 Tipo: -\n📝 Actividad: -\n👤 Reportado por: -</div>
+            </div>
+
+            <button class="btn-whatsapp" id="enviarBtn">
+                📲 ENVIAR A WHATSAPP
+            </button>
+            <div id="errorMsg" class="error"></div>
+        </div>
+
+        <div class="footer">
+            Los reportes se enviarán al número configurado
+        </div>
+    </div>
+
+    <script>
+        const NUMERO_DESTINO = "595981301833";
+        let fotos = []; // Array para almacenar las fotos en base64
+
+        // ========== MANEJO DE FOTOS ==========
+        function actualizarGaleria() {
+            const galeria = document.getElementById('galeria');
+            galeria.innerHTML = '';
+            fotos.forEach((foto, index) => {
+                const div = document.createElement('div');
+                div.className = 'foto-item';
+                div.innerHTML = `
+                    <img src="${foto}" alt="Foto ${index + 1}">
+                    <button class="btn-eliminar" data-index="${index}">✕</button>
+                `;
+                galeria.appendChild(div);
+            });
+            
+            document.querySelectorAll('.btn-eliminar').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = parseInt(btn.dataset.index);
+                    fotos.splice(index, 1);
+                    actualizarGaleria();
+                    actualizarPreview();
+                });
+            });
+        }
+
+        document.getElementById('btnAgregarFoto').addEventListener('click', () => {
+            document.getElementById('inputFotos').click();
+        });
+
+        document.getElementById('inputFotos').addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            const maxFotos = 5;
+            const nuevasFotos = fotos.length + files.length;
+            
+            if (nuevasFotos > maxFotos) {
+                alert(`Solo puedes agregar hasta ${maxFotos} fotos. Actualmente tienes ${fotos.length} fotos.`);
+                return;
+            }
+            
+            files.forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        fotos.push(event.target.result);
+                        actualizarGaleria();
+                        actualizarPreview();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            e.target.value = '';
+        });
+
+        document.getElementById('btnEliminarTodas').addEventListener('click', () => {
+            if (confirm('¿Eliminar todas las fotos?')) {
+                fotos = [];
+                actualizarGaleria();
+                actualizarPreview();
+            }
+        });
+
+        // ========== FUNCIONES PRINCIPALES ==========
+        function getRadioValue(nombre) {
+            const radios = document.getElementsByName(nombre);
+            for (let i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    return radios[i].value;
+                }
+            }
+            return '-';
+        }
+        
+        function getCheckboxValues(selector) {
+            let valores = [];
+            document.querySelectorAll(selector).forEach(cb => {
+                if (cb.checked) valores.push(cb.value);
+            });
+            return valores.length > 0 ? valores.join(', ') : '-';
+        }
+
+        function toggleCampoSilo611() {
+            const aditivoSeleccionado = getRadioValue('aditivoSeleccionado');
+            const campoSilo = document.getElementById('campoSilo611');
+            
+            if (aditivoSeleccionado === 'Sika') {
+                campoSilo.classList.add('visible');
+            } else {
+                campoSilo.classList.remove('visible');
+                document.querySelectorAll('input[name="silo611"]').forEach(radio => {
+                    radio.checked = false;
+                });
+            }
+            actualizarPreview();
+        }
+
+        function generarMensajeConFotos() {
+            const turno = document.getElementById('turno').value || '-';
+            const area = document.getElementById('area').value || '-';
+            const tipo = document.getElementById('tipo').value || '-';
+            const actividad = document.getElementById('actividad').value || '-';
+            const reportado = document.getElementById('reportado').value || '-';
+
+            let mensaje = `📋 REPORTE DE PLANTA%0A%0A`;
+            mensaje += `🔄 Turno: ${turno}%0A`;
+            mensaje += `🏭 Área: ${area}%0A`;
+            mensaje += `📌 Tipo: ${tipo}%0A`;
+            mensaje += `📝 Actividad: ${actividad}%0A`;
+
+            if (area === 'Crudo') {
+                mensaje += `%0A--- CRUDO ---%0A`;
+                mensaje += `📊 Grados pila 1: ${document.getElementById('gradosPila1').value || '-'}%0A`;
+                mensaje += `📊 Grados pila 2: ${document.getElementById('gradosPila2').value || '-'}%0A`;
+                mensaje += `📊 % pila 3: ${document.getElementById('porcentajePila3').value || '-'}%0A`;
+                mensaje += `🔄 Pilas patio circular: ${getRadioValue('pilasPatio')}%0A`;
+                mensaje += `📈 Grados para consumo: ${document.getElementById('gradosConsumo').value || '-'}%0A`;
+                mensaje += `📉 Grados formación: ${document.getElementById('gradosFormacion').value || '-'}%0A`;
+                
+            } else if (area === 'Horno') {
+                mensaje += `%0A--- HORNO ---%0A`;
+                mensaje += `🌬️ Posición ventiladores coraza:%0A`;
+                mensaje += `   📍 M01: ${document.getElementById('metroM01').value || '-'}%0A`;
+                mensaje += `   📍 M02: ${document.getElementById('metroM02').value || '-'}%0A`;
+                mensaje += `   📍 M03: ${document.getElementById('metroM03').value || '-'}%0A`;
+                mensaje += `   📍 M04: ${document.getElementById('metroM04').value || '-'}%0A`;
+                mensaje += `📏 Altura cama enfriador crossbar: ${document.getElementById('alturaCrossbar').value || '-'}%0A`;
+                mensaje += `🎯 Axial quemador: ${document.getElementById('axialQuemador').value || '-'}%0A`;
+                mensaje += `🎯 Radial quemador: ${document.getElementById('radialQuemador').value || '-'}%0A`;
+                
+            } else if (area === 'Cemento') {
+                const aditivoSeleccionado = getRadioValue('aditivoSeleccionado');
+                mensaje += `%0A--- CEMENTO ---%0A`;
+                mensaje += `🧪 Nivel aditivo Sika (cm): ${document.getElementById('nivelSika').value || '-'}%0A`;
+                mensaje += `🧪 Nivel aditivo Grace (cm): ${document.getElementById('nivelGrace').value || '-'}%0A`;
+                mensaje += `🔘 Aditivo seleccionado: ${aditivoSeleccionado}%0A`;
+                if (aditivoSeleccionado === 'Sika') {
+                    mensaje += `🚫 Sin paso al silo 611: ${getRadioValue('silo611')}%0A`;
+                }
+                
+            } else if (area === 'Petcoke') {
+                mensaje += `%0A--- PETCOKE ---%0A`;
+                mensaje += `📝 Observaciones: ${document.getElementById('petcokeObs').value || '-'}%0A`;
+                
+            } else if (area === 'Equipos Moviles') {
+                const condiciones = getCheckboxValues('.condCheckbox');
+                const mantenimientos = getCheckboxValues('.mantCheckbox');
+                mensaje += `%0A--- EQUIPOS MÓVILES ---%0A`;
+                mensaje += `🔧 Equipo: ${document.getElementById('tipoEquipo').value || '-'}%0A`;
+                mensaje += `🆔 ID/Placa: ${document.getElementById('idEquipo').value || '-'}%0A`;
+                mensaje += `📊 Horómetro: ${document.getElementById('horometro').value || '-'}%0A`;
+                mensaje += `⛽ Combustible: ${document.getElementById('combustible').value || '-'}%0A`;
+                mensaje += `🔍 Condición: ${condiciones}%0A`;
+                mensaje += `🔧 Mantenimiento: ${mantenimientos}%0A`;
+                mensaje += `📝 Observaciones: ${document.getElementById('obsEquipo').value || '-'}%0A`;
+                mensaje += `👨‍🔧 Operador: ${document.getElementById('operadorEquipo').value || '-'}%0A`;
+            }
+
+            mensaje += `%0A👤 Reportado por: ${reportado}%0A`;
+            mensaje += `%0A⏰ ${new Date().toLocaleString()}`;
+            
+            if (fotos.length > 0) {
+                mensaje += `%0A%0A📸 FOTOS ADJUNTAS: ${fotos.length} foto(s) incluida(s) en el mensaje.%0A`;
+            }
+
+            return mensaje;
+        }
+
+        async function enviarWhatsAppConFotos() {
+            if (!validarFormulario()) return;
+            
+            const mensaje = generarMensajeConFotos();
+            let url = `https://wa.me/${NUMERO_DESTINO}?text=${mensaje}`;
+            
+            if (fotos.length > 0) {
+                alert(`📸 Se adjuntarán ${fotos.length} foto(s) al reporte.\n\nDespués de enviar el mensaje, podrás seleccionar las imágenes desde tu galería.`);
+            }
+            
+            window.open(url, '_blank');
+        }
+
+        function actualizarPreview() {
+            const turno = document.getElementById('turno').value || '-';
+            const area = document.getElementById('area').value || '-';
+            const tipo = document.getElementById('tipo').value || '-';
+            const actividad = document.getElementById('actividad').value || '-';
+            const reportado = document.getElementById('reportado').value || '-';
+
+            let previewTexto = `📋 REPORTE DE PLANTA\n\n`;
+            previewTexto += `🔄 Turno: ${turno}\n`;
+            previewTexto += `🏭 Área: ${area}\n`;
+            previewTexto += `📌 Tipo: ${tipo}\n`;
+            previewTexto += `📝 Actividad: ${actividad}\n`;
+
+            if (area === 'Crudo') {
+                previewTexto += `\n--- CRUDO ---\n`;
+                previewTexto += `📊 Grados pila 1: ${document.getElementById('gradosPila1').value || '-'}\n`;
+                previewTexto += `📊 Grados pila 2: ${document.getElementById('gradosPila2').value || '-'}\n`;
+                previewTexto += `📊 % pila 3: ${document.getElementById('porcentajePila3').value || '-'}\n`;
+                previewTexto += `🔄 Pilas patio circular: ${getRadioValue('pilasPatio')}\n`;
+                previewTexto += `📈 Grados para consumo: ${document.getElementById('gradosConsumo').value || '-'}\n`;
+                previewTexto += `📉 Grados formación: ${document.getElementById('gradosFormacion').value || '-'}\n`;
+                
+            } else if (area === 'Horno') {
+                previewTexto += `\n--- HORNO ---\n`;
+                previewTexto += `🌬️ Posición ventiladores coraza:\n`;
+                previewTexto += `   📍 M01: ${document.getElementById('metroM01').value || '-'}\n`;
+                previewTexto += `   📍 M02: ${document.getElementById('metroM02').value || '-'}\n`;
+                previewTexto += `   📍 M03: ${document.getElementById('metroM03').value || '-'}\n`;
+                previewTexto += `   📍 M04: ${document.getElementById('metroM04').value || '-'}\n`;
+                previewTexto += `📏 Altura cama enfriador crossbar: ${document.getElementById('alturaCrossbar').value || '-'}\n`;
+                previewTexto += `🎯 Axial quemador: ${document.getElementById('axialQuemador').value || '-'}\n`;
+                previewTexto += `🎯 Radial quemador: ${document.getElementById('radialQuemador').value || '-'}\n`;
+                
+            } else if (area === 'Cemento') {
+                const aditivoSeleccionado = getRadioValue('aditivoSeleccionado');
+                previewTexto += `\n--- CEMENTO ---\n`;
+                previewTexto += `🧪 Nivel aditivo Sika (cm): ${document.getElementById('nivelSika').value || '-'}\n`;
+                previewTexto += `🧪 Nivel aditivo Grace (cm): ${document.getElementById('nivelGrace').value || '-'}\n`;
+                previewTexto += `🔘 Aditivo seleccionado: ${aditivoSeleccionado}\n`;
+                if (aditivoSeleccionado === 'Sika') {
+                    previewTexto += `🚫 Sin paso al silo 611: ${getRadioValue('silo611')}\n`;
+                }
+                
+            } else if (area === 'Petcoke') {
+                previewTexto += `\n--- PETCOKE ---\n`;
+                previewTexto += `📝 Observaciones: ${document.getElementById('petcokeObs').value || '-'}\n`;
+                
+            } else if (area === 'Equipos Moviles') {
+                const condiciones = getCheckboxValues('.condCheckbox');
+                const mantenimientos = getCheckboxValues('.mantCheckbox');
+                previewTexto += `\n--- EQUIPOS MÓVILES ---\n`;
+                previewTexto += `🔧 Equipo: ${document.getElementById('tipoEquipo').value || '-'}\n`;
+                previewTexto += `🆔 ID/Placa: ${document.getElementById('idEquipo').value || '-'}\n`;
+                previewTexto += `📊 Horómetro: ${document.getElementById('horometro').value || '-'}\n`;
+                previewTexto += `⛽ Combustible: ${document.getElementById('combustible').value || '-'}\n`;
+                previewTexto += `🔍 Condición: ${condiciones}\n`;
+                previewTexto += `🔧 Mantenimiento: ${mantenimientos}\n`;
+                previewTexto += `📝 Observaciones: ${document.getElementById('obsEquipo').value || '-'}\n`;
+                previewTexto += `👨‍🔧 Operador: ${document.getElementById('operadorEquipo').value || '-'}\n`;
+            }
+
+            previewTexto += `\n👤 Reportado por: ${reportado}\n`;
+            previewTexto += `\n⏰ ${new Date().toLocaleString()}`;
+            
+            if (fotos.length > 0) {
+                previewTexto += `\n\n📸 ${fotos.length} foto(s) adjunta(s)`;
+            }
+
+            document.getElementById('preview').innerText = previewTexto;
+        }
+
+        function toggleAreaCampos() {
+            const area = document.getElementById('area').value;
+            
+            document.getElementById('crudoCampos').classList.remove('visible');
+            document.getElementById('hornoCampos').classList.remove('visible');
+            document.getElementById('cementoCampos').classList.remove('visible');
+            document.getElementById('petcokeCampos').classList.remove('visible');
+            document.getElementById('equiposMovilesCampos').classList.remove('visible');
+            
+            if (area === 'Crudo') document.getElementById('crudoCampos').classList.add('visible');
+            else if (area === 'Horno') document.getElementById('hornoCampos').classList.add('visible');
+            else if (area === 'Cemento') document.getElementById('cementoCampos').classList.add('visible');
+            else if (area === 'Petcoke') document.getElementById('petcokeCampos').classList.add('visible');
+            else if (area === 'Equipos Moviles') document.getElementById('equiposMovilesCampos').classList.add('visible');
+            
+            actualizarPreview();
+        }
+
+        function validarFormulario() {
+            const turno = document.getElementById('turno').value;
+            const area = document.getElementById('area').value;
+            const actividad = document.getElementById('actividad').value.trim();
+            const reportado = document.getElementById('reportado').value.trim();
+
+            if (!turno || !area || !actividad || !reportado) {
+                document.getElementById('errorMsg').style.display = 'block';
+                document.getElementById('errorMsg').innerText = '⚠️ Completa: Turno, Área, Actividad y Reportado por';
+                return false;
+            }
+
+            if (area === 'Crudo') {
+                if (!document.getElementById('gradosPila1').value.trim() ||
+                    !document.getElementById('gradosPila2').value.trim() ||
+                    !document.getElementById('porcentajePila3').value.trim() ||
+                    getRadioValue('pilasPatio') === '-' ||
+                    !document.getElementById('gradosConsumo').value.trim() ||
+                    !document.getElementById('gradosFormacion').value.trim()) {
+                    document.getElementById('errorMsg').style.display = 'block';
+                    document.getElementById('errorMsg').innerText = '⚠️ Completa todos los parámetros de CRUDO';
+                    return false;
+                }
+            }
+            
+            if (area === 'Horno') {
+                if (!document.getElementById('metroM01').value.trim() ||
+                    !document.getElementById('metroM02').value.trim() ||
+                    !document.getElementById('metroM03').value.trim() ||
+                    !document.getElementById('metroM04').value.trim() ||
+                    !document.getElementById('alturaCrossbar').value.trim() ||
+                    !document.getElementById('axialQuemador').value.trim() ||
+                    !document.getElementById('radialQuemador').value.trim()) {
+                    document.getElementById('errorMsg').style.display = 'block';
+                    document.getElementById('errorMsg').innerText = '⚠️ Completa todos los parámetros de HORNO';
+                    return false;
+                }
+            }
+            
+            if (area === 'Cemento') {
+                const aditivo = getRadioValue('aditivoSeleccionado');
+                if (!document.getElementById('nivelSika').value.trim() ||
+                    !document.getElementById('nivelGrace').value.trim() ||
+                    aditivo === '-') {
+                    document.getElementById('errorMsg').style.display = 'block';
+                    document.getElementById('errorMsg').innerText = '⚠️ Completa: Niveles de aditivos y selecciona un aditivo';
+                    return false;
+                }
+                if (aditivo === 'Sika' && getRadioValue('silo611') === '-') {
+                    document.getElementById('errorMsg').style.display = 'block';
+                    document.getElementById('errorMsg').innerText = '⚠️ Selecciona Sí o No para "Sin paso al silo 611"';
+                    return false;
+                }
+            }
+            
+            if (area === 'Equipos Moviles') {
+                const condiciones = document.querySelectorAll('.condCheckbox:checked');
+                if (!document.getElementById('tipoEquipo').value ||
+                    !document.getElementById('idEquipo').value.trim() ||
+                    !document.getElementById('horometro').value.trim() ||
+                    !document.getElementById('combustible').value.trim() ||
+                    condiciones.length === 0) {
+                    document.getElementById('errorMsg').style.display = 'block';
+                    document.getElementById('errorMsg').innerText = '⚠️ Completa: Tipo equipo, ID, Horómetro, Combustible y Condición';
+                    return false;
+                }
+            }
+
+            document.getElementById('errorMsg').style.display = 'none';
+            return true;
+        }
+
+        // Event listeners
+        document.getElementById('enviarBtn').addEventListener('click', enviarWhatsAppConFotos);
+        document.getElementById('area').addEventListener('change', toggleAreaCampos);
+        
+        const allInputs = document.querySelectorAll('input, select, textarea');
+        allInputs.forEach(el => {
+            el.addEventListener('input', actualizarPreview);
+            el.addEventListener('change', actualizarPreview);
+        });
+        
+        document.querySelectorAll('input[name="aditivoSeleccionado"]').forEach(radio => {
+            radio.addEventListener('change', toggleCampoSilo611);
+        });
+
+        toggleAreaCampos();
+        actualizarPreview();
+    </script>
+</body>
+</html>
