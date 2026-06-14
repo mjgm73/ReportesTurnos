@@ -839,7 +839,7 @@
             window.open(url, '_blank');
         }*/
 
-        async function enviarWhatsAppConFotos() {
+        /*async function enviarWhatsAppConFotos() {
             if (!validarFormulario()) return;
             
             const mensaje = generarMensajeConFotos();
@@ -852,6 +852,33 @@
             }
             
             window.open(url, '_blank');
+        }*/
+
+        async function enviarWhatsAppConFotos() {
+            if (!validarFormulario()) return;
+            
+            const mensaje = generarMensajeConFotos();
+            const telefono = NUMERO_DESTINO;
+            
+            // Limpiar el mensaje para la URL
+            const textoLimpio = mensaje.replace(/%0A/g, '\n');
+            
+            // Usar whatsapp:// en lugar de wa.me (abre DIRECTAMENTE la app)
+            const urlApp = `whatsapp://send?phone=${telefono}&text=${encodeURIComponent(textoLimpio)}`;
+            
+            if (fotos.length > 0) {
+                alert(`📸 IMPORTANTE:\n\nTu reporte tiene ${fotos.length} foto(s) para adjuntar.\n\n1. Se abrirá WhatsApp con el texto del reporte\n2. Toca el ícono 📎 (Adjuntar)\n3. Selecciona "Galería" o "Fotos"\n4. Elige las ${fotos.length} foto(s) que preparaste\n5. Envía el mensaje completo`);
+            } else {
+                alert("📋 Reporte generado. Se abrirá WhatsApp para enviar el texto.");
+            }
+            
+            // Abrir directamente la app (NO el navegador)
+            window.location.href = urlApp;
+            
+            // Si después de 2 segundos no se abrió, probablemente no tiene la app
+            setTimeout(() => {
+                alert("⚠️ No se pudo abrir WhatsApp.\n\nAsegúrate de tener la app instalada.");
+            }, 2000);
         }
 
         function actualizarPreview() {
