@@ -826,7 +826,7 @@
             return mensaje;
         }
 
-        async function enviarWhatsAppConFotos() {
+        /*async function enviarWhatsAppConFotos() {
             if (!validarFormulario()) return;
             
             const mensaje = generarMensajeConFotos();
@@ -834,6 +834,21 @@
             
             if (fotos.length > 0) {
                 alert(`📸 Se adjuntarán ${fotos.length} foto(s) al reporte.\n\nDespués de enviar el mensaje, podrás seleccionar las imágenes desde tu galería.`);
+            }
+            
+            window.open(url, '_blank');
+        }*/
+
+        async function enviarWhatsAppConFotos() {
+            if (!validarFormulario()) return;
+            
+            const mensaje = generarMensajeConFotos();
+            let url = `https://wa.me/${NUMERO_DESTINO}?text=${mensaje}`;
+            
+            if (fotos.length > 0) {
+                alert(`📸 IMPORTANTE:\n\nTu reporte tiene ${fotos.length} foto(s) para adjuntar.\n\n1. Se abrirá WhatsApp con el texto del reporte\n2. Toca el ícono 📎 (Adjuntar)\n3. Selecciona "Galería" o "Fotos"\n4. Elige las ${fotos.length} foto(s) que preparaste\n5. Envía el mensaje completo`);
+            } else {
+                alert("📋 Reporte generado. Se abrirá WhatsApp para enviar el texto.");
             }
             
             window.open(url, '_blank');
