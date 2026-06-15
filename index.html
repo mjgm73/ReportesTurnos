@@ -389,6 +389,21 @@
             font-size: 11px;
             margin-left: 8px;
         }
+
+        .error {
+            color: #e53e3e;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+            background: #fff5f5;
+            padding: 12px;
+            border-radius: 12px;
+            border-left: 3px solid #e53e3e;
+        }
+
+        .error br {
+            margin: 4px 0;
+        }
     </style>
 </head>
 <body>
@@ -646,6 +661,25 @@
                 <div id="preview">📋 REPORTE DE PLANTA\n\n🔄 Turno: -\n🏭 Área: -\n📌 Tipo: -\n📝 Actividad: -\n👤 Reportado por: -</div>
             </div>
 
+            <!-- Campo para cambiar número de teléfono -->
+            <div class="campo">
+                <label>📞 Enviar a:</label>
+                <input type="tel" id="telefonoDestino" placeholder="Ej: 595981301833" value="595981301833">
+                <small style="color: #7f8c8d; font-size: 11px;">Formato internacional: código país + número (sin signos +)</small>
+            </div>
+
+            <!-- <div class="campo">
+
+                <label>📞 Enviar a:</label>
+                <select id="telefonoDestino">
+                    <option value="595981301833">Miguel Gonzalez - 0981 301833</option>
+                    <option value="595981301834">Supervisor 2 - 0981 301834</option>
+                    <option value="595981301835">Jefe de Turno - 0981 301835</option>
+                    <option value="595981301836">Coordinador - 0981 301836</option>
+                </select>
+                <small style="color: #7f8c8d; font-size: 11px;">Formato internacional: código país + número (sin signos +)</small>
+            </div> -->
+
             <button class="btn-whatsapp" id="enviarBtn">
                 📲 ENVIAR A WHATSAPP
             </button>
@@ -839,26 +873,36 @@
             window.open(url, '_blank');
         }*/
 
-        /*async function enviarWhatsAppConFotos() {
-            if (!validarFormulario()) return;
+        // async function enviarWhatsAppConFotos() {
+        //     if (!validarFormulario()) return;
             
-            const mensaje = generarMensajeConFotos();
-            let url = `https://wa.me/${NUMERO_DESTINO}?text=${mensaje}`;
+        //     const mensaje = generarMensajeConFotos();
+        //     let url = `https://wa.me/${NUMERO_DESTINO}?text=${mensaje}`;
             
-            if (fotos.length > 0) {
-                alert(`📸 IMPORTANTE:\n\nTu reporte tiene ${fotos.length} foto(s) para adjuntar.\n\n1. Se abrirá WhatsApp con el texto del reporte\n2. Toca el ícono 📎 (Adjuntar)\n3. Selecciona "Galería" o "Fotos"\n4. Elige las ${fotos.length} foto(s) que preparaste\n5. Envía el mensaje completo`);
-            } else {
-                alert("📋 Reporte generado. Se abrirá WhatsApp para enviar el texto.");
-            }
+        //     if (fotos.length > 0) {
+        //         alert(`📸 IMPORTANTE:\n\nTu reporte tiene ${fotos.length} foto(s) para adjuntar.\n\n1. Se abrirá WhatsApp con el texto del reporte\n2. Toca el ícono 📎 (Adjuntar)\n3. Selecciona "Galería" o "Fotos"\n4. Elige las ${fotos.length} foto(s) que preparaste\n5. Envía el mensaje completo`);
+        //     } else {
+        //         alert("📋 Reporte generado. Se abrirá WhatsApp para enviar el texto.");
+        //     }
             
-            window.open(url, '_blank');
-        }*/
+        //     window.open(url, '_blank');
+        // }
 
         async function enviarWhatsAppConFotos() {
             if (!validarFormulario()) return;
             
             const mensaje = generarMensajeConFotos();
-            const telefono = NUMERO_DESTINO;
+            // Leer el teléfono desde el campo de texto
+            let telefono = document.getElementById('telefonoDestino').value.trim();
+            
+            // Validar que el teléfono no esté vacío
+            if (!telefono) {
+                alert("⚠️ Ingresa un número de teléfono válido.");
+                return;
+            }
+            
+            // Limpiar el número (eliminar espacios, guiones, etc.)
+            telefono = telefono.replace(/\s+/g, '').replace(/-/g, '').replace(/\+/g, '');
             
             // Limpiar el mensaje para la URL
             const textoLimpio = mensaje.replace(/%0A/g, '\n');
@@ -872,10 +916,42 @@
                 alert("📋 Reporte generado. Se abrirá WhatsApp para enviar el texto.");
             }
             
-            // Abrir directamente la app (NO el navegador)
+            // Abrir directamente la app
             window.location.href = urlApp;
             
-            // Si después de 2 segundos no se abrió, probablemente no tiene la app
+            setTimeout(() => {
+                alert("⚠️ No se pudo abrir WhatsApp.\n\nAsegúrate de tener la app instalada.");
+            }, 2000);
+        }
+
+        async function enviarWhatsAppConFotos() {
+            if (!validarFormulario()) return;
+            
+            const mensaje = generarMensajeConFotos();
+            // Leer el teléfono desde el campo de texto
+            let telefono = document.getElementById('telefonoDestino').value.trim();
+            
+            // Validar que el teléfono no esté vacío
+            if (!telefono) {
+                alert("⚠️ Ingresa un número de teléfono válido.");
+                return;
+            }
+            
+            // Limpiar el número (eliminar espacios, guiones, etc.)
+            telefono = telefono.replace(/\s+/g, '').replace(/-/g, '').replace(/\+/g, '');
+            
+            // Limpiar el mensaje para la URL
+            const textoLimpio = mensaje.replace(/%0A/g, '\n');
+            
+            // Usar whatsapp:// para abrir DIRECTAMENTE la app
+            const urlApp = `whatsapp://send?phone=${telefono}&text=${encodeURIComponent(textoLimpio)}`;
+            
+            // Mensaje recordatorio SIEMPRE (las fotos son opcionales)
+            alert("📸 RECORDATORIO:\n\nSi deseas adjuntar fotos de la novedad:\n\n1. Se abrirá WhatsApp con el texto del reporte\n2. Toca el ícono 📎 (Adjuntar)\n3. Selecciona \"Galería\" o \"Fotos\"\n4. Elige las fotos que quieras enviar\n5. Envía el mensaje completo");
+            
+            // Abrir directamente la app
+            window.location.href = urlApp;
+            
             setTimeout(() => {
                 alert("⚠️ No se pudo abrir WhatsApp.\n\nAsegúrate de tener la app instalada.");
             }, 2000);
@@ -970,70 +1046,174 @@
             actualizarPreview();
         }
 
+        // function validarFormulario() {
+        //     const turno = document.getElementById('turno').value;
+        //     const area = document.getElementById('area').value;
+        //     const actividad = document.getElementById('actividad').value.trim();
+        //     const reportado = document.getElementById('reportado').value.trim();
+
+        //     if (!turno || !area || !actividad || !reportado) {
+        //         document.getElementById('errorMsg').style.display = 'block';
+        //         document.getElementById('errorMsg').innerText = '⚠️ Completa: Turno, Área, Actividad y Reportado por';
+        //         return false;
+        //     }
+
+        //     if (area === 'Crudo') {
+        //         if (!document.getElementById('gradosPila1').value.trim() ||
+        //             !document.getElementById('gradosPila2').value.trim() ||
+        //             !document.getElementById('porcentajePila3').value.trim() ||
+        //             getRadioValue('pilasPatio') === '-' ||
+        //             !document.getElementById('gradosConsumo').value.trim() ||
+        //             !document.getElementById('gradosFormacion').value.trim()) {
+        //             document.getElementById('errorMsg').style.display = 'block';
+        //             document.getElementById('errorMsg').innerText = '⚠️ Completa todos los parámetros de CRUDO';
+        //             return false;
+        //         }
+        //     }
+            
+        //     if (area === 'Horno') {
+        //         if (!document.getElementById('metroM01').value.trim() ||
+        //             !document.getElementById('metroM02').value.trim() ||
+        //             !document.getElementById('metroM03').value.trim() ||
+        //             !document.getElementById('metroM04').value.trim() ||
+        //             !document.getElementById('alturaCrossbar').value.trim() ||
+        //             !document.getElementById('axialQuemador').value.trim() ||
+        //             !document.getElementById('radialQuemador').value.trim()) {
+        //             document.getElementById('errorMsg').style.display = 'block';
+        //             document.getElementById('errorMsg').innerText = '⚠️ Completa todos los parámetros de HORNO';
+        //             return false;
+        //         }
+        //     }
+            
+        //     if (area === 'Cemento') {
+        //         const aditivo = getRadioValue('aditivoSeleccionado');
+        //         if (!document.getElementById('nivelSika').value.trim() ||
+        //             !document.getElementById('nivelGrace').value.trim() ||
+        //             aditivo === '-') {
+        //             document.getElementById('errorMsg').style.display = 'block';
+        //             document.getElementById('errorMsg').innerText = '⚠️ Completa: Niveles de aditivos y selecciona un aditivo';
+        //             return false;
+        //         }
+        //         if (aditivo === 'Sika' && getRadioValue('silo611') === '-') {
+        //             document.getElementById('errorMsg').style.display = 'block';
+        //             document.getElementById('errorMsg').innerText = '⚠️ Selecciona Sí o No para "Sin paso al silo 611"';
+        //             return false;
+        //         }
+        //     }
+            
+        //     if (area === 'Equipos Moviles') {
+        //         const condiciones = document.querySelectorAll('.condCheckbox:checked');
+        //         if (!document.getElementById('tipoEquipo').value ||
+        //             !document.getElementById('idEquipo').value.trim() ||
+        //             !document.getElementById('horometro').value.trim() ||
+        //             !document.getElementById('combustible').value.trim() ||
+        //             condiciones.length === 0) {
+        //             document.getElementById('errorMsg').style.display = 'block';
+        //             document.getElementById('errorMsg').innerText = '⚠️ Completa: Tipo equipo, ID, Horómetro, Combustible y Condición';
+        //             return false;
+        //         }
+        //     }
+
+        //     document.getElementById('errorMsg').style.display = 'none';
+        //     return true;
+        // }
+
         function validarFormulario() {
             const turno = document.getElementById('turno').value;
             const area = document.getElementById('area').value;
+            const tipo = document.getElementById('tipo').value;
             const actividad = document.getElementById('actividad').value.trim();
             const reportado = document.getElementById('reportado').value.trim();
-
-            if (!turno || !area || !actividad || !reportado) {
+            
+            // Array para almacenar los campos faltantes
+            let camposFaltantes = [];
+            
+            if (!turno) camposFaltantes.push("🔄 Turno");
+            if (!area) camposFaltantes.push("🏭 Área");
+            if (!tipo) camposFaltantes.push("📌 Tipo");
+            if (!actividad) camposFaltantes.push("📝 Actividad / Novedad");
+            if (!reportado) camposFaltantes.push("👤 Reportado por");
+            
+            // Si faltan campos obligatorios generales
+            if (camposFaltantes.length > 0) {
                 document.getElementById('errorMsg').style.display = 'block';
-                document.getElementById('errorMsg').innerText = '⚠️ Completa: Turno, Área, Actividad y Reportado por';
+                document.getElementById('errorMsg').innerHTML = `⚠️ Completa los siguientes campos:<br>${camposFaltantes.join('<br>')}`;
                 return false;
             }
 
+            // Validaciones específicas por área
             if (area === 'Crudo') {
-                if (!document.getElementById('gradosPila1').value.trim() ||
-                    !document.getElementById('gradosPila2').value.trim() ||
-                    !document.getElementById('porcentajePila3').value.trim() ||
-                    getRadioValue('pilasPatio') === '-' ||
-                    !document.getElementById('gradosConsumo').value.trim() ||
-                    !document.getElementById('gradosFormacion').value.trim()) {
+                let faltantesCrudo = [];
+                if (!document.getElementById('gradosPila1').value.trim()) faltantesCrudo.push("📊 Grados pila 1");
+                if (!document.getElementById('gradosPila2').value.trim()) faltantesCrudo.push("📊 Grados pila 2");
+                if (!document.getElementById('porcentajePila3').value.trim()) faltantesCrudo.push("📊 % pila 3");
+                if (getRadioValue('pilasPatio') === '-') faltantesCrudo.push("🔄 Pilas patio circular");
+                if (!document.getElementById('gradosConsumo').value.trim()) faltantesCrudo.push("📈 Grados para consumo");
+                if (!document.getElementById('gradosFormacion').value.trim()) faltantesCrudo.push("📉 Grados formación");
+                
+                if (faltantesCrudo.length > 0) {
                     document.getElementById('errorMsg').style.display = 'block';
-                    document.getElementById('errorMsg').innerText = '⚠️ Completa todos los parámetros de CRUDO';
+                    document.getElementById('errorMsg').innerHTML = `⚠️ Completa los siguientes parámetros de CRUDO:<br>${faltantesCrudo.join('<br>')}`;
                     return false;
                 }
             }
             
             if (area === 'Horno') {
-                if (!document.getElementById('metroM01').value.trim() ||
-                    !document.getElementById('metroM02').value.trim() ||
-                    !document.getElementById('metroM03').value.trim() ||
-                    !document.getElementById('metroM04').value.trim() ||
-                    !document.getElementById('alturaCrossbar').value.trim() ||
-                    !document.getElementById('axialQuemador').value.trim() ||
-                    !document.getElementById('radialQuemador').value.trim()) {
+                let faltantesHorno = [];
+                if (!document.getElementById('metroM01').value.trim()) faltantesHorno.push("📍 M01");
+                if (!document.getElementById('metroM02').value.trim()) faltantesHorno.push("📍 M02");
+                if (!document.getElementById('metroM03').value.trim()) faltantesHorno.push("📍 M03");
+                if (!document.getElementById('metroM04').value.trim()) faltantesHorno.push("📍 M04");
+                if (!document.getElementById('alturaCrossbar').value.trim()) faltantesHorno.push("📏 Altura cama enfriador crossbar");
+                if (!document.getElementById('axialQuemador').value.trim()) faltantesHorno.push("🎯 Axial quemador");
+                if (!document.getElementById('radialQuemador').value.trim()) faltantesHorno.push("🎯 Radial quemador");
+                
+                if (faltantesHorno.length > 0) {
                     document.getElementById('errorMsg').style.display = 'block';
-                    document.getElementById('errorMsg').innerText = '⚠️ Completa todos los parámetros de HORNO';
+                    document.getElementById('errorMsg').innerHTML = `⚠️ Completa los siguientes parámetros de HORNO:<br>${faltantesHorno.join('<br>')}`;
                     return false;
                 }
             }
             
             if (area === 'Cemento') {
+                let faltantesCemento = [];
+                if (!document.getElementById('nivelSika').value.trim()) faltantesCemento.push("🧪 Nivel aditivo Sika (cm)");
+                if (!document.getElementById('nivelGrace').value.trim()) faltantesCemento.push("🧪 Nivel aditivo Grace (cm)");
+                
                 const aditivo = getRadioValue('aditivoSeleccionado');
-                if (!document.getElementById('nivelSika').value.trim() ||
-                    !document.getElementById('nivelGrace').value.trim() ||
-                    aditivo === '-') {
+                if (aditivo === '-') faltantesCemento.push("🔘 Seleccionar aditivo (Grace o Sika)");
+                
+                if (faltantesCemento.length > 0) {
                     document.getElementById('errorMsg').style.display = 'block';
-                    document.getElementById('errorMsg').innerText = '⚠️ Completa: Niveles de aditivos y selecciona un aditivo';
+                    document.getElementById('errorMsg').innerHTML = `⚠️ Completa los siguientes parámetros de CEMENTO:<br>${faltantesCemento.join('<br>')}`;
                     return false;
                 }
+                
                 if (aditivo === 'Sika' && getRadioValue('silo611') === '-') {
                     document.getElementById('errorMsg').style.display = 'block';
-                    document.getElementById('errorMsg').innerText = '⚠️ Selecciona Sí o No para "Sin paso al silo 611"';
+                    document.getElementById('errorMsg').innerHTML = `⚠️ Completa el campo:<br>🚫 Sin paso al silo 611 (Sí o No)`;
                     return false;
                 }
             }
             
+            if (area === 'Petcoke') {
+                // Petcoke no tiene campos obligatorios adicionales
+                // Solo la observación es opcional
+            }
+            
             if (area === 'Equipos Moviles') {
+                let faltantesEquipos = [];
+                if (!document.getElementById('tipoEquipo').value) faltantesEquipos.push("🔧 Equipo");
+                if (!document.getElementById('idEquipo').value.trim()) faltantesEquipos.push("🆔 ID / Placa / Número de equipo");
+                if (!document.getElementById('horometro').value.trim()) faltantesEquipos.push("📊 Horómetro (hrs)");
+                if (!document.getElementById('combustible').value.trim()) faltantesEquipos.push("⛽ Nivel combustible");
+                
                 const condiciones = document.querySelectorAll('.condCheckbox:checked');
-                if (!document.getElementById('tipoEquipo').value ||
-                    !document.getElementById('idEquipo').value.trim() ||
-                    !document.getElementById('horometro').value.trim() ||
-                    !document.getElementById('combustible').value.trim() ||
-                    condiciones.length === 0) {
+                if (condiciones.length === 0) faltantesEquipos.push("🔍 Condición del equipo (Bueno, Regular o Malo)");
+                
+                if (faltantesEquipos.length > 0) {
                     document.getElementById('errorMsg').style.display = 'block';
-                    document.getElementById('errorMsg').innerText = '⚠️ Completa: Tipo equipo, ID, Horómetro, Combustible y Condición';
+                    document.getElementById('errorMsg').innerHTML = `⚠️ Completa los siguientes parámetros de EQUIPOS MÓVILES:<br>${faltantesEquipos.join('<br>')}`;
                     return false;
                 }
             }
